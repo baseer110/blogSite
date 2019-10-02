@@ -10,6 +10,12 @@
     text-decoration: none;
 }
 
+.page-header p {
+    font-size: 18pt;
+    font-family: Tangerine;
+    margin-top: 15px;
+}
+
 h1, h2, h3, h4 {
     font-family: 'Inconsolata', 'Droid Sans', serif;
     font-size: 48px;
