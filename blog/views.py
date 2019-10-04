@@ -4,6 +4,7 @@ from django.contrib.auth.decorators import login_required
 from blog.forms import PostForm
 from .models import Post
 from blog.forms import CommentForm
+from .models import Comment
 
 
 # Create your views here.
@@ -78,3 +79,9 @@ def add_comment(request, pk):
     else:
         form = CommentForm()
     return render(request, 'blog/add_comment.html', {'form': form})
+
+
+def remove_comment(request, pk):
+    comment = get_object_or_404(Comment, pk=pk)
+    comment.delete()
+    return redirect('post_detail', postid=comment.post.pk)
