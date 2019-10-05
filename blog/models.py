@@ -12,6 +12,8 @@ class Post(models.Model):
         self.published_date = timezone.now()
         self.save()
 
+    def approved_comments(self):
+        return self.comments.filter(is_approved=True)
 
     def __str__(self):
         return self.title
@@ -21,6 +23,11 @@ class Comment(models.Model):
     author = models.CharField(max_length=200)
     text = models.TextField()
     created_date = models.DateTimeField(default=timezone.now())
+    is_approved = models.BooleanField(default=False)
 
     def __str__(self):
         return self.text
+
+    def approve(self):
+        self.is_approved = True
+        self.save()

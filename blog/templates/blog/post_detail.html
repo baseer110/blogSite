@@ -22,14 +22,22 @@
     <hr>
     <a href="{% url 'add_comment' pk=post.pk %}" class="btn btn-success">Add Comment</a>
     {% for comment in post.comments.all %}
-        <div class="comment">
-            <div class="date">
-                {{ comment.created_date }}
+        {% if user.is_authenticated or comment.is_approved %}
+            <div class="comment">
+                <div class="date">
+                    {{ comment.created_date }}
+                </div>
+                {% if not comment.is_approved and user.is_superuser %}
+                    <a href="{% url 'approve_comment' pk=comment.pk %}">
+                        <i class="fas fa-check"></i>
+                    </a>
+
+                    <a href="{% url 'remove_comment' pk=comment.pk %}"><i class="fas fa-trash-alt"></i></a>
+                {% endif %}
+                <strong>{{ comment.author }}</strong>
+                <p>{{ comment.text }}</p>
             </div>
-            <a href="{% url 'remove_comment' pk=comment.pk %}"><i class="fas fa-trash-alt"></i></a>
-            <strong>{{ comment.author }}</strong>
-            <p>{{ comment.text }}</p>
-        </div>
+        {% endif %}
     {% empty %}
         <p>No comments yet!!!</p>
     {% endfor %}
