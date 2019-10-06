@@ -22,4 +22,5 @@ urlpatterns = [
 
     path('comment/<int:pk>/approve/', views.approve_comment, name='approve_comment'),
 
+    path('signup/', views.signup, name='signup'),
 ]

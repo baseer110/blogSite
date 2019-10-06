@@ -5,6 +5,9 @@ from blog.forms import PostForm
 from .models import Post
 from blog.forms import CommentForm
 from .models import Comment
+from django.contrib.auth.models import User
+from blog.forms import UserForm
+from django.contrib.auth import login
 
 
 # Create your views here.
@@ -65,11 +68,13 @@ def post_publish(request, pk):
     post.publish()
     return redirect('post_detail', postid=pk)
 
+
 @login_required
 def delete_post(request, pk):
     post = get_object_or_404(Post, pk=pk)
     post.delete()
     return redirect("post_list")
+
 
 @login_required
 def add_comment(request, pk):
@@ -86,11 +91,13 @@ def add_comment(request, pk):
         form = CommentForm()
     return render(request, 'blog/add_comment.html', {'form': form})
 
+
 @login_required
 def remove_comment(request, pk):
     comment = get_object_or_404(Comment, pk=pk)
     comment.delete()
     return redirect('post_detail', postid=comment.post.pk)
+
 
 @login_required
 def approve_comment(request, pk):
@@ -99,3 +106,13 @@ def approve_comment(request, pk):
     return redirect("post_detail", postid=comment.post.pk)
 
 
+def signup(request):
+    if request.method == 'POST':
+        form = UserForm(request.POST)
+        if form.is_valid():
+            new_user = User.objects.create_user(**form.cleaned_data)
+            login(request, new_user)
+            return redirect('/')
+    else:
+        form = UserForm()
+    return render(request, 'registration/signup.html', {'form': form})
