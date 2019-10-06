@@ -66,6 +66,12 @@ def post_publish(request, pk):
     return redirect('post_detail', postid=pk)
 
 @login_required
+def delete_post(request, pk):
+    post = get_object_or_404(Post, pk=pk)
+    post.delete()
+    return redirect("post_list")
+
+@login_required
 def add_comment(request, pk):
     post = get_object_or_404(Post, pk=pk)
     if request.method == 'POST':
@@ -91,3 +97,5 @@ def approve_comment(request, pk):
     comment = get_object_or_404(Comment, pk=pk)
     comment.approve()
     return redirect("post_detail", postid=comment.post.pk)
+
+
